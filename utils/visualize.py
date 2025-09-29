@@ -11,6 +11,27 @@ from .metric import running_mean
 from .label import PredictionType
 
 
+def plot_random_example():
+    """Plot a random image from the dataset."""
+    fls = glob.glob(os.path.join("dsb2018", "train", "*.zarr"))
+    fl = zarr.open(fls[random.randrange(len(fls))], 'r')
+    raw = fl["volumes/raw"]
+    labels_2class = fl["volumes/gt_fgbg"]
+    labels_3class = fl["volumes/gt_threeclass"]
+
+    fig = plt.figure(figsize=(12, 8))
+    fig.add_subplot(1, 3, 1)
+    plt.imshow(np.squeeze(raw), cmap='gray')
+    plt.title("raw image")
+    fig.add_subplot(1, 3, 2)
+    plt.imshow(np.squeeze(labels_2class), cmap='gist_earth')
+    plt.title("2-class mask")
+    fig.add_subplot(1, 3, 3)
+    plt.imshow(np.squeeze(labels_3class), cmap='gist_earth')
+    plt.title("3-class mask")
+    plt.show()
+
+
 def plot_image(raw, labels, pred=None, prediction_type=PredictionType.TWO_CLASS):
     """Plot an image with the raw image, the ground truth and the prediction if any next to each other."""
     if prediction_type == PredictionType.AFFINITIES:
