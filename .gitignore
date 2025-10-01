@@ -1,8 +1,6 @@
 # CUSTOM
 dsb2018/
 logs/
-images/
-data.zip
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
