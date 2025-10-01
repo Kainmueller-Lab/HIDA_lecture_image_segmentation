@@ -1,6 +1,6 @@
 ## How to setup Google Colab
 
-You already know about colab from the previous exercises. Here are the most important infos again:
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YourUser/YourRepo/blob/main/notebook.ipynb) 
 
 **Requirements** To use Colab, you must have a Google account with an associated Google Drive.
 

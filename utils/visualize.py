@@ -252,3 +252,16 @@ def get_random_colormap():
     rand_cmap = ListedColormap(vals)
 
     return rand_cmap
+
+def plot_in_out(input_img, output_img):
+    fig, axes = plt.subplots(1, 2, figsize=(8, 4))
+    axes[0].imshow(input_img[0, 0].detach().numpy(), cmap="gray", aspect="equal")
+    axes[0].set_title("Input")
+    axes[0].axis("off")
+
+    axes[1].imshow(output_img[0, 0].detach().numpy(), cmap="gray", aspect="equal")
+    axes[1].set_title("Output after ConvPass")
+    axes[1].axis("off")
+
+    plt.tight_layout()
+    plt.show()
