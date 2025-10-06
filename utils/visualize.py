@@ -13,7 +13,7 @@ from .label import PredictionType
 
 def plot_random_example():
     """Plot a random image from the dataset."""
-    fls = glob.glob(os.path.join("dsb2018", "train", "*.zarr"))
+    fls = glob.glob(os.path.join("data", "dsb2018", "train", "*.zarr"))
     fl = zarr.open(fls[random.randrange(len(fls))], 'r')
     raw = fl["volumes/raw"]
     labels_2class = fl["volumes/gt_fgbg"]
@@ -56,7 +56,7 @@ def plot_image(raw, labels, pred=None, prediction_type=PredictionType.TWO_CLASS)
 
 def plot_random_image(prediction_type=PredictionType.TWO_CLASS):
     """Plot a random image from the dataset."""
-    fls = glob.glob(os.path.join("dsb2018", "train", "*.zarr"))
+    fls = glob.glob(os.path.join("data", "dsb2018", "train", "*.zarr"))
     fl = zarr.open(fls[random.randrange(len(fls))], 'r')
     raw = fl["volumes/raw"]
     if prediction_type == PredictionType.TWO_CLASS:
