@@ -7,35 +7,6 @@ You will explore how models learn to separate cells in microscopy images and how
 
 ---
 
-## Lecture Content Overview
-
-The lecture notebook is organized into the following sections:
-
-1. **Setup and Environment**
-   - Configuration for Google Colab  
-   - Installation of required packages and imports  
-   - Loading light microscopy imaging data from the **Data Science Bowl 2018 (DSB 2018)**
-
-2. **Exploring the Dataset**
-   - Visual inspection and understanding of input images and segmentation masks  
-
-3. **Understanding the U-Net Architecture**
-   - Step-by-step illustration of encoder, decoder, and skip connections  
-   - Discussion of how U-Nets are used for **foreground–background segmentation**
-
-4. **Training a U-Net Model**
-   - Model training and performance visualization  
-   - Evaluation using segmentation metrics  
-
-5. **Using a Pretrained Model**
-   - Loading and comparing performance against a pretrained U-Net  
-
-6. **Instance Segmentation with CellPose**
-   - Applying CellPose for cell detection and segmentation  
-   - Performing downstream analysis such as **cell counting** and **statistical measurements**
-
----
-
 ## How to Use This Notebook
 
 ### Access via Google Colab
