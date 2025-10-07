@@ -1,7 +1,6 @@
 # Machine Learning for Image Segmentation — HIDA Lecture
 
 This lecture introduces **Machine Learning for Image Segmentation** using a hands-on, guided Jupyter Notebook designed for **Google Colab**.  
-It is aimed at research scientists who are curious about deep learning techniques for biomedical image analysis and have **basic Python knowledge** but may not be machine learning experts.
 
 The notebook provides a step-by-step introduction to modern segmentation methods and walks through both **foreground–background segmentation** using a U-Net and **instance segmentation** using CellPose.  
 You will explore how models learn to separate cells in microscopy images and how these techniques can be applied to **quantitative biological analysis** such as cell counting and morphology statistics.
@@ -15,7 +14,7 @@ The lecture notebook is organized into the following sections:
 1. **Setup and Environment**
    - Configuration for Google Colab  
    - Installation of required packages and imports  
-   - Loading toy data from the **Data Science Bowl 2018 (DSB 2018)**
+   - Loading light microscopy imaging data from the **Data Science Bowl 2018 (DSB 2018)**
 
 2. **Exploring the Dataset**
    - Visual inspection and understanding of input images and segmentation masks  
@@ -71,6 +70,3 @@ If you prefer to run the notebook locally or in your own Jupyter environment:
 
 ```bash
 git clone https://github.com/Kainmueller-Lab/HIDA_lecture_image_segmentation.git
-cd HIDA_lecture_image_segmentation
-pip install -r requirements.txt
-jupyter notebook segmentation.ipynb
