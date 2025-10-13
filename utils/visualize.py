@@ -253,15 +253,132 @@ def get_random_colormap():
 
     return rand_cmap
 
-def plot_in_out(input_img, output_img):
+def plot_in_out(input_img, output_img, title=""):
     fig, axes = plt.subplots(1, 2, figsize=(8, 4))
     axes[0].imshow(input_img[0, 0].detach().numpy(), cmap="gray", aspect="equal")
     axes[0].set_title("Input")
     axes[0].axis("off")
 
     axes[1].imshow(output_img[0, 0].detach().numpy(), cmap="gray", aspect="equal")
-    axes[1].set_title("Output after ConvPass")
+    axes[1].set_title(title)
     axes[1].axis("off")
+
+    plt.tight_layout()
+    plt.show()
+
+
+import matplotlib.pyplot as plt
+import torch
+
+def plot_unet_prediction(input_img, output_img):
+    """
+    Visualize the U-Net input, each output channel, and the final predicted segmentation mask (argmax).
+
+    Parameters
+    ----------
+    input_img : torch.Tensor
+        Input image tensor of shape (1, 1, H, W)
+    output_img : torch.Tensor
+        Model output tensor of shape (1, 3, H, W)
+    title : str
+        Title for the overall plot
+    """
+
+    # Convert tensors to numpy arrays for plotting
+    input_np = input_img[0, 0].detach().cpu().numpy()
+    output_np = output_img[0].detach().cpu().numpy()  # shape: (3, H, W)
+    pred_np = torch.argmax(output_img, dim=1)[0].detach().cpu().numpy()  # values 0, 1, or 2
+
+    # Set up figure
+    fig, axes = plt.subplots(1, 5, figsize=(15, 4))
+    plt.suptitle("Class probabilities and final U-Net prediction", fontsize=16)
+
+    # 1. Input image
+    axes[0].imshow(input_np, cmap="gray")
+    axes[0].set_title("Input")
+    axes[0].axis("off")
+
+    # 2–4. Output channels
+    class_names = ["Background (black)", "Interior (green)", "Boundary (white)"]
+    for i in range(3):
+        axes[i + 1].imshow(output_np[i], cmap="gray", vmin=0, vmax=1)
+        axes[i + 1].set_title(class_names[i])
+        axes[i + 1].axis("off")
+
+    # 5. Final argmax prediction (discrete mask)
+    axes[4].imshow(pred_np, cmap="gist_earth", vmin=0, vmax=2)
+    axes[4].set_title("Predicted Mask")
+    axes[4].axis("off")
+
+    plt.tight_layout()
+    plt.show()
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+
+def plot_cellpose_predictions(img, masks, flows):
+    """
+    Visualize the input image, instance segmentation, and predicted centerpoint vectors.
+
+    Parameters
+    ----------
+    img : np.ndarray
+        Input image, shape (H, W) or (C, H, W)
+    masks : np.ndarray
+        Instance segmentation mask, shape (H, W)
+    flows : list or tuple
+        CellPose flow outputs (flows[1] contains 2D vector fields)
+    """
+
+    # --- Prepare input image for display (copy only, do not modify original) ---
+    if img.ndim == 3 and img.shape[0] in [1, 3]:
+        # Convert (C, H, W) → (H, W, C)
+        input_img = np.moveaxis(img, 0, -1).copy()
+    elif img.ndim == 2:
+        # Grayscale image → RGB triplet
+        input_img = np.stack([img]*3, axis=-1).copy()
+    else:
+        raise ValueError(f"Unexpected input image shape: {img.shape}")
+
+    # --- Prepare mask (ensure 2D for imshow) ---
+    temp_masks = masks.copy()
+    if temp_masks.ndim == 3:
+        temp_masks = temp_masks[0]
+
+    # --- Compute flow visualization (non-destructive) ---
+    flow = flows[1]  # (2, H, W)
+    vec_y, vec_x = flow[0].copy(), flow[1].copy()
+
+    # Compute angle (direction) and magnitude (strength)
+    angle = np.arctan2(vec_y, vec_x)
+    magnitude = np.sqrt(vec_x**2 + vec_y**2)
+
+    # Convert to HSV color encoding
+    hue = (angle + np.pi) / (2 * np.pi)               # hue = direction
+    mag_norm = magnitude / (magnitude.max() + 1e-8)   # normalized magnitude
+    hsv = np.zeros((*angle.shape, 3), dtype=float)
+    hsv[..., 0] = hue
+    hsv[..., 1] = 1.0
+    hsv[..., 2] = mag_norm
+    flow_rgb = mcolors.hsv_to_rgb(hsv)
+    flow_rgb = np.clip(flow_rgb, 0, 1)  # ensure valid display range [0, 1]
+
+    # --- Plot results ---
+    fig, axes = plt.subplots(1, 3, figsize=(20, 8))
+
+    axes[0].imshow(input_img, cmap="gray")
+    axes[0].set_title("Input")
+    axes[0].axis("off")
+
+    axes[1].imshow(temp_masks, cmap="nipy_spectral")
+    axes[1].set_title("Instance Segmentation")
+    axes[1].axis("off")
+
+    axes[2].imshow(flow_rgb)
+    axes[2].set_title("Centerpoint Vectors (hue = direction)")
+    axes[2].axis("off")
 
     plt.tight_layout()
     plt.show()
