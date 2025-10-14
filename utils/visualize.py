@@ -377,7 +377,7 @@ def plot_cellpose_predictions(img, masks, flows):
     axes[1].axis("off")
 
     axes[2].imshow(flow_rgb)
-    axes[2].set_title("Centerpoint Vectors (hue = direction)")
+    axes[2].set_title("Flow Vectors (hue = direction)")
     axes[2].axis("off")
 
     plt.tight_layout()
